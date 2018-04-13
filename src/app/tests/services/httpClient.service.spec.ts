@@ -47,7 +47,7 @@ describe('HttpClientService (with spies)', () => {
   });
 });
 
-describe('HeroesService (with mocks)', () => {
+describe('CelebritiesService (with mocks)', () => {
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
   let httpClientService: HttpClientService;
@@ -209,17 +209,8 @@ describe('HeroesService (with mocks)', () => {
 
 
 
-
-
-
-
-
-
-
-
-
 import { HttpHeaders } from '@angular/common/http';
-
+// below are some more tests for httpClient
 interface Data {
   name: string;
 }
