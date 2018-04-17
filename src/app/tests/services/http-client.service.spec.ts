@@ -1,15 +1,34 @@
 // Http testing module and mocking controller
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { TestBed } from '@angular/core/testing';
+import { TestBed, ɵTestingCompiler } from '@angular/core/testing';
 import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 
 
 import { asyncData, asyncError } from '../../shared';
 import { Celebrity } from '../tests.model';
-import { HttpClientService } from './httpClient.service';
+import { HttpClientService } from './http-client.service';
 
+/**
+some of the aspects of service Testing:
+测试的方面：
+-use spies to test function
+-return error to user-friendly error / succeed response / succeed but no data
+-called one time / multiple times
+-use mock to test
+-use stub to test
+-beforeEach / afterEach
+-request: Header
+-request: call methods (put / post / get / delete /)
+-request: body
+-test Observable by using flush ,need subscribe first
+-network error
+-use httpTestingController + httpClient to test httpClient
+-multiple requests
+-test response: method
+-test response: status
+*/
 describe('HttpClientService (with spies)', () => {
   let httpClientSpy: { get: jasmine.Spy };
   let httpClientService: HttpClientService;
@@ -47,7 +66,7 @@ describe('HttpClientService (with spies)', () => {
   });
 });
 
-describe('CelebritiesService (with mocks)', () => {
+describe('HTTPClientService (with mocks)', () => {
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
   let httpClientService: HttpClientService;
@@ -74,11 +93,11 @@ describe('CelebritiesService (with mocks)', () => {
 
   /// HttpClientService method tests begin ///
   describe('#getCelebrities', () => {
-    let expectedHeroes: Celebrity[];
+    let expectedCelebrities: Celebrity[];
 
     beforeEach(() => {
       httpClientService = TestBed.get(HttpClientService);
-      expectedHeroes = [
+      expectedCelebrities = [     // stub
         { id: 1, name: 'A' },
         { id: 2, name: 'B' },
       ] as Celebrity[];
@@ -86,32 +105,32 @@ describe('CelebritiesService (with mocks)', () => {
 
     it('should return expected celebrities (called once)', () => {
       httpClientService.getCelebrities().subscribe(
-        heroes => expect(heroes).toEqual(expectedHeroes, 'should return expected heroes'),
+        celebrities => expect(celebrities).toEqual(expectedCelebrities, 'should return expected celebrities'),
         fail
       );
 
-      // HttpClientService should have made one request to GET heroes from expected URL
+      // HttpClientService should have made one request to GET celebrities from expected URL
       const req = httpTestingController.expectOne(httpClientService.celebrityesUrl);
       expect(req.request.method).toEqual('GET');
 
-      // Respond with the mock heroes
-      req.flush(expectedHeroes);
+      // Respond with the mock celebrities
+      req.flush(expectedCelebrities);
     });
 
-    it('should be OK returning no heroes', () => {
+    it('should be OK returning no celebrities', () => {
       httpClientService.getCelebrities().subscribe(
-        heroes => expect(heroes.length).toEqual(0, 'should have empty heroes array'),
+        celebrities => expect(celebrities.length).toEqual(0, 'should have empty celebrities array'),
         fail
       );
 
       const req = httpTestingController.expectOne(httpClientService.celebrityesUrl);
-      req.flush([]); // Respond with no heroes
+      req.flush([]); // Respond with no celebrities
     });
 
     it('should turn 404 into a user-friendly error', () => {
       const msg = 'Deliberate 404';
       httpClientService.getCelebrities().subscribe(
-        heroes => fail('expected to fail'),
+        celebrities => fail('expected to fail'),
         error => expect(error.message).toContain(msg)
       );
 
@@ -121,11 +140,11 @@ describe('CelebritiesService (with mocks)', () => {
       req.flush(msg, { status: 404, statusText: 'Not Found' });
     });
 
-    it('should return expected heroes (called multiple times)', () => {
+    it('should return expected celebrities (called multiple times)', () => {
       httpClientService.getCelebrities().subscribe();
       httpClientService.getCelebrities().subscribe();
       httpClientService.getCelebrities().subscribe(
-        heroes => expect(heroes).toEqual(expectedHeroes, 'should return expected heroes'),
+        celebrities => expect(celebrities).toEqual(expectedCelebrities, 'should return expected celebrities'),
         fail
       );
 
@@ -135,7 +154,7 @@ describe('CelebritiesService (with mocks)', () => {
       // Respond to each request with different mock hero results
       requests[0].flush([]);
       requests[1].flush([{ id: 1, name: 'bob' }]);
-      requests[2].flush(expectedHeroes);
+      requests[2].flush(expectedCelebrities);
     });
   });
 
@@ -167,7 +186,7 @@ describe('CelebritiesService (with mocks)', () => {
       const msg = 'Deliberate 404';
       const updateCelebrity: Celebrity = { id: 1, name: 'A' };
       httpClientService.updateCelebrity(updateCelebrity).subscribe(
-        heroes => fail('expected to fail'),
+        celebrities => fail('expected to fail'),
         error => expect(error.message).toContain(msg)
       );
 
@@ -182,7 +201,7 @@ describe('CelebritiesService (with mocks)', () => {
 
       const updateCelebrity: Celebrity = { id: 1, name: 'A' };
       httpClientService.updateCelebrity(updateCelebrity).subscribe(
-        heroes => fail('expected to fail'),
+        celebrities => fail('expected to fail'),
         error => expect(error.message).toContain(emsg)
       );
 
@@ -208,6 +227,10 @@ describe('CelebritiesService (with mocks)', () => {
 });
 
 
+/**
+ * Extended interactions between a data service and the HttpClient can be complex and difficult to mock with spies.
+ * The HttpClientTestingModule can make these testing scenarios more manageable.
+ */
 
 import { HttpHeaders } from '@angular/common/http';
 // below are some more tests for httpClient
@@ -230,6 +253,7 @@ describe('HttpClient testing', () => {
     httpClient = TestBed.get(HttpClient);
     httpTestingController = TestBed.get(HttpTestingController);
   });
+
   afterEach(() => {
     // After every test, assert that there are no more pending requests.
     httpTestingController.verify();
