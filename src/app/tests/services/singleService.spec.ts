@@ -1,4 +1,4 @@
-import { SingleService } from './singleService';
+import { TheSingleService as SingleService } from './singleService';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
 

@@ -8,30 +8,15 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { delay } from 'rxjs/operators';
 
-import { ApiService } from '../../shared';
+import { ApiService, SingleService } from '../../shared';
 
 @Injectable()
-export class SingleService {
+export class TheSingleService extends SingleService {
 
-  protected value = 'real value';
+  // constructor() {
+  //   super();
+  // }
 
-  getValue() {
-    return this.value;
-  }
+  value = 'value of theSingleService';
 
-  setValue(value: string) {
-    this.value = value;
-  }
-
-  getObservableValue() {
-    return of('observable value');
-  }
-
-  getPromiseValue() {
-    return Promise.resolve('promise value');
-  }
-
-  getObservableDelayValue() {
-    return of('observable delay value').pipe(delay(10));
-  }
 }
