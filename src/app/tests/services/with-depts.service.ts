@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { SingleService } from './singleService';
+import { TheSingleService as SingleService } from './singleService';
 
 @Injectable()
 export class WithDeptsService {

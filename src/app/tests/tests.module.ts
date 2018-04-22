@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { TestsComponent } from './tests.component';
 
 import { TestsRoutingModule } from './tests-routing.module';
-import { TestBedComponent } from './test-bed/test-bed.component';
 
 @NgModule({
   imports: [
     CommonModule,
     TestsRoutingModule
   ],
-  declarations: [TestsComponent, TestBedComponent]
+  declarations: [
+    TestsComponent
+  ]
 })
 export class TestsModule { }
