@@ -50,7 +50,7 @@ describe('HttpServiceService (using old HttpModule)', () => {
     expect(be).not.toBeNull('backend should be provided');
   });
 
-  describe('when getHeroes', () => {
+  describe('when getHeroes(no testBed)', () => {
     let fakeHeroes: Celebrity[];
     let http: Http;
     let response: Response;

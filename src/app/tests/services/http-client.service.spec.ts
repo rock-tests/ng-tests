@@ -12,9 +12,9 @@ import { HttpClientService } from './http-client.service';
 
 /**
 some of the aspects of service Testing:
-测试的方面：
+aspects of testing http client：
 -use spies to test function
--return error to user-friendly error / succeed response / succeed but no data
+-return succeed response / user-friendly error / succeed but no data
 -called one time / multiple times
 -use mock to test
 -use stub to test
