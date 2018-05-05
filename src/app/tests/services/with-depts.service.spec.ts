@@ -12,7 +12,7 @@ export class FakeSingleService extends SingleService {
  * below are ways of test dependance services without TestBed,
  * more methods with testBed: ../test-bed/test-bed.componenent.spec
  */
-describe('WithDeptsService', () => {
+describe('WithDeptsService without Angular testing support', () => {
 /*   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -30,7 +30,7 @@ describe('WithDeptsService', () => {
 
   it('#getValue should return real value from the real service', () => {
     withDeptsService = new WithDeptsService(new SingleService());
-    expect(withDeptsService.getValue()).toBe('real value');
+    expect(withDeptsService.getValue()).toBe('value of theSingleService');
   });
 
   it('#getValue should return faked value from a fakeService', () => {
@@ -53,10 +53,10 @@ describe('WithDeptsService', () => {
     const stubValue = 'stub value';
     valueServiceSpy.getValue.and.returnValue(stubValue);
 
-    withDeptsService = new WithDeptsService(valueServiceSpy);
+    withDeptsService = new WithDeptsService(valueServiceSpy as SingleService);
 
     expect(withDeptsService.getValue())
-      .toBe(stubValue, 'service returned stub value');
+      .toBe(stubValue, 'service returned stub value');    // ???
     expect(valueServiceSpy.getValue.calls.count())
       .toBe(1, 'spy method was called once');
     expect(valueServiceSpy.getValue.calls.mostRecent().returnValue)

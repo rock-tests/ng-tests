@@ -5,6 +5,8 @@ import { SingleService } from '../../shared';
 @Injectable()
 export class TestBedService extends SingleService {
 
+  value = 'value of TestBedService';
+
   constructor() {
     super();
   }

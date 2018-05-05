@@ -46,7 +46,7 @@ describe('HttpClientService (with spies)', () => {
 
     httpClientService.getCelebrities().subscribe(
       celebrities => expect(celebrities).toEqual(expectedCelebrities, 'expected celebrities'),
-      fail  // from the framework
+      fail  // from the framework, must provide
     );
     expect(httpClientSpy.get.calls.count()).toBe(1, 'one call');
   });
@@ -283,7 +283,7 @@ describe('HttpClient testing', () => {
     req.flush(testData);
 
     // Finally, assert that there are no outstanding requests.
-    httpTestingController.verify();
+    // httpTestingController.verify();
   });
 
   it('can test HttpClient.get with matching header', () => {

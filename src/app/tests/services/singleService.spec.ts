@@ -10,7 +10,7 @@ describe('SingleService', () => {
   });
 
   it('#getValue should return real value', () => {
-    expect(service.getValue()).toBe('real value');
+    expect(service.getValue()).toBe('value of theSingleService');
   });
 
   it('#getObservableValue should return value from observable',
