@@ -8,7 +8,7 @@ import { of } from 'rxjs/observable/of';
 import { Celebrity } from '../tests.model';
 import { HttpServiceService } from './http-service.service';
 
-const makeHeroData = () => [
+const makeCelebrities = () => [
   { id: 1, name: 'Windstorm' },
   { id: 2, name: 'Bombasto' },
   { id: 3, name: 'Magneta' },
@@ -51,7 +51,7 @@ describe('HttpServiceService (using old HttpModule)', () => {
   });
 
   describe('when getHeroes(no testBed)', () => {
-    let fakeHeroes: Celebrity[];
+    let fakeCelebrities: Celebrity[];
     let http: Http;
     let response: Response;
 
@@ -61,43 +61,43 @@ describe('HttpServiceService (using old HttpModule)', () => {
       http = TestBed.get(Http);
 
       service = new HttpServiceService(http);
-      fakeHeroes = makeHeroData();
-      const options = new ResponseOptions({ status: 200, body: { data: fakeHeroes } });
+      fakeCelebrities = makeCelebrities();
+      const options = new ResponseOptions({ status: 200, body: { data: fakeCelebrities } });
       response = new Response(options);
     });
 
-    it('should have expected fake heroes (then)', () => {
+    it('should have expected fake celebrities (then)', () => {
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
 
       service.getHeroes().toPromise()
         // .then(() => Promise.reject('deliberate'))
-        .then(heroes => {
-          expect(heroes.length).toBe(fakeHeroes.length,
-            'should have expected no. of heroes');
+        .then(celebrities => {
+          expect(celebrities.length).toBe(fakeCelebrities.length,
+            'should have expected no. of celebrities');
         })
         .catch(fail);
     });
 
-    it('should have expected fake heroes (Observable tap)', () => {
+    it('should have expected fake celebrities (Observable tap)', () => {
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(response));
 
       service.getHeroes().subscribe(
-        heroes => {
-          expect(heroes.length).toBe(fakeHeroes.length,
-            'should have expected no. of heroes');
+        celebrities => {
+          expect(celebrities.length).toBe(fakeCelebrities.length,
+            'should have expected no. of celebrities');
         },
         fail
       );
     });
 
 
-    it('should be OK returning no heroes', () => {
+    it('should be OK returning no celebrities', () => {
       const resp = new Response(new ResponseOptions({ status: 200, body: { data: [] } }));
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(resp));
 
       service.getHeroes().subscribe(
-        heroes => {
-          expect(heroes.length).toBe(0, 'should have no heroes');
+        celebrities => {
+          expect(celebrities.length).toBe(0, 'should have no celebrities');
         },
         fail
       );
@@ -108,7 +108,7 @@ describe('HttpServiceService (using old HttpModule)', () => {
       backend.connections.subscribe((c: MockConnection) => c.mockRespond(resp));
 
       service.getHeroes().subscribe(
-        heroes => fail('should not respond with heroes'),
+        celebrities => fail('should not respond with celebrities'),
         err => {
           expect(err).toMatch(/Bad response status/, 'should catch bad response status code');
           return of(null); // failure is the expected test result

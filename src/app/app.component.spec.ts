@@ -1,10 +1,30 @@
 import { TestBed, async } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import {
+  provideRoutes,
+} from '@angular/router';
+import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
+import { ComponentTestComponent } from './tests/component-test/component-test.component';
 import { AppComponent } from './app.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { appRoutes } from './app-routing.module';
+
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+
+      imports: [
+        { // TODO RouterTestingModule.withRoutes coming soon
+          ngModule: RouterTestingModule,
+          providers: [provideRoutes(appRoutes)],
+        },
+      ],
       declarations: [
-        AppComponent
+        AppComponent,
+        ComponentTestComponent,
+        NotFoundComponent,
       ],
     }).compileComponents();
   }));
